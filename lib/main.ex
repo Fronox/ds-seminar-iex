@@ -25,14 +25,6 @@ defmodule Main do
     :lists.merge(sorted1, sorted2)
   end
 
-  @spec merge([any], [any]) :: [any]
-  @spec merge([any], [any], [any]) :: [any]
-  def merge(l1, l2), do: merge(l1, l2, [])
-  def merge([], l2, acc), do: acc ++ l2
-  def merge(l1, [], acc), do: acc ++ l1
-  def merge([h1|t1], [h2|t2], acc) when h1 <= h2, do: merge(t1, [h2|t2], acc ++ [h1])
-  def merge([h1|t1], [h2|t2], acc) when h1 > h2, do: merge([h1|t1], t2, acc ++ [h2])
-
   # mat_mul_iter(M1Row, M2Col) ->
   #   lists:sum([X * Y || {X, Y} <- lists:zip(M1Row, M2Col)]).
 
