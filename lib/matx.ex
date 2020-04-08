@@ -3,28 +3,6 @@ defmodule Main do
   Documentation for `Main`.
   """
 
-  @spec par_merge_sort([any]) :: [any]
-  def par_merge_sort([el]), do: [el]
-
-  def par_merge_sort(list) do
-    {l1, l2} = list |> Enum.split(length(list) |> div(2))
-    t1 = Task.async(__MODULE__, :par_merge_sort, [l1])
-    t2 = Task.async(__MODULE__, :par_merge_sort, [l2])
-    sorted1 = Task.await(t1)
-    sorted2 = Task.await(t2)
-    merge(sorted1, sorted2)
-  end
-
-  @spec seq_merge_sort(list) :: [any]
-  def seq_merge_sort([el]), do: [el]
-
-  def seq_merge_sort(list) do
-    {l1, l2} = list |> Enum.split(length(list) |> div(2))
-    sorted1 = l1 |> seq_merge_sort
-    sorted2 = l2 |> seq_merge_sort
-    :lists.merge(sorted1, sorted2)
-  end
-
   # mat_mul_iter(M1Row, M2Col) ->
   #   lists:sum([X * Y || {X, Y} <- lists:zip(M1Row, M2Col)]).
 
@@ -46,7 +24,7 @@ defmodule Main do
   # mat_test(M1, M2) ->
   #   mat_mul(M1, M2).
 
-  def seq_mat_mul(m1, m2) when length(hd(m1)) == length(m2) do
+  defp seq_mat_mul(m1, m2) when length(hd(m1)) == length(m2) do
     seq_mat_mul(m1, m2, [], 0, [])
   end
 
@@ -76,16 +54,4 @@ defmodule Main do
     ]
     :io.format("~w~n", [seq_mat_mul(m1, m2)])
   end
-
-  @spec main(integer) :: float
-  def main(len) do
-    # list = 1..len |> Enum.to_list |> Enum.map(fn _ -> Enum.random(1..10) end)
-    # IO.puts "Start"
-    # {time, sorted} = :timer.tc(__MODULE__, :par_merge_sort, [list])
-    # timeMs = time / 1000
-    # IO.puts "Taken time: #{timeMs}"
-    # timeMs
-    mat_test()
-  end
-
 end
