@@ -3,27 +3,6 @@ defmodule Main do
   Documentation for `Main`.
   """
 
-  # mat_mul_iter(M1Row, M2Col) ->
-  #   lists:sum([X * Y || {X, Y} <- lists:zip(M1Row, M2Col)]).
-
-  # mat_mul(M1, M2) when length(hd(M1)) == length(M2) ->
-  #   mat_mul(M1, M2, [], 1, []).
-
-  # mat_mul([], _, _, _, AccGlob) ->
-  #   AccGlob;
-
-  # mat_mul(M1, M2, Acc, Idx, AccGlob) when Idx =< length(hd(M2)) -> % For each column in M2
-  #   M1Row = hd(M1),
-  #   M2Col = lists:map(fun(M2Row) -> lists:nth(Idx, M2Row) end, M2),
-  #   IterRes = mat_mul_iter(M1Row, M2Col),
-  #   mat_mul(M1, M2, Acc ++ [IterRes], Idx + 1, AccGlob);
-
-  # mat_mul([_|T1], M2, Acc, _, AccGlob) ->
-  #   mat_mul(T1, M2, [], 1, AccGlob ++ [Acc]).
-
-  # mat_test(M1, M2) ->
-  #   mat_mul(M1, M2).
-
   defp seq_mat_mul(m1, m2) when length(hd(m1)) == length(m2) do
     seq_mat_mul(m1, m2, [], 0, [])
   end
@@ -39,6 +18,10 @@ defmodule Main do
   end
 
   defp seq_mat_mul([_|t1], m2, acc, _, accGlob), do: seq_mat_mul(t1, m2, [], 0, accGlob ++ [acc])
+
+  defp par_mat_mul(mat1, mat2, PsLim \\ 8) when length(mat1) != 0 and length(mat2) != 0 and length(hd(mat1)) == length(mat2) do
+    :pass
+  end
 
   def mat_test() do
     m1 = [
