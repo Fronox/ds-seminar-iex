@@ -1,9 +1,9 @@
 defmodule AgentExample do
-  def agent_name do
+  defp agent_name do
     __MODULE__
   end
 
-  def start({:initial, state}) when is_map(state) do
+  def start(state) when is_map(state) do
     Agent.start_link(fn -> state end, name: agent_name())
   end
 
@@ -15,7 +15,7 @@ defmodule AgentExample do
     Agent.get(agent_name(), & &1)
   end
 
-  def get({:key, key}) do
+  def get(key) do
     Agent.get(agent_name(), fn state -> state |> Map.get(key) end)
   end
 
@@ -27,15 +27,15 @@ defmodule AgentExample do
     Agent.cast(agent_name(), fn state -> state |> Map.put(key, value) end)
   end
 
-  def remove({:key, key}) do
+  def remove(key) do
     Agent.update(agent_name(), fn state -> state |> Map.delete(key) end)
   end
 
-  def remove_async({:key, key}) do
+  def remove_async(key) do
     Agent.cast(agent_name(), fn state -> state |> Map.delete(key) end)
   end
 
-  def pop({:key, key}) do
+  def pop(key) do
     Agent.get_and_update(agent_name(), fn state -> state |> Map.pop(key) end)
   end
 
