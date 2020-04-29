@@ -26,6 +26,11 @@ defmodule GSExample do
     {:reply, item, state}
   end
 
+  def handle_call({:get!, key}, _from, state) do
+    {:ok, item} = state |> Map.fetch!(key)
+    {:reply, item, state}
+  end
+
   def handle_call({:put, key, value}, _from, state) do
     {:reply, :ok, state |> Map.put(key, value)}
   end
@@ -59,7 +64,7 @@ defmodule GSExample do
   end
 
 
-  def start(init_state) when is_map(init_state) do
+  def start_link(init_state) when is_map(init_state) do
     GenServer.start_link(server_name(), init_state, name: server_name())
   end
 
@@ -69,6 +74,10 @@ defmodule GSExample do
 
   def get(key) do
     GenServer.call(server_name(), {:get, key})
+  end
+
+  def get!(key) do
+    GenServer.call(server_name(), {:get!, key})
   end
 
   def add(key, value) do

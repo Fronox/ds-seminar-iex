@@ -1,6 +1,8 @@
 defmodule SupExample do
+  use Supervisor
 
-  def start_gen_server() do
+  @impl true
+  def init(_init_arg) do
     children = [
       %{
         id: GSExample,
@@ -8,6 +10,10 @@ defmodule SupExample do
       }
     ]
 
-    Supervisor.start_link(children, strategy: :one_for_one)
+    Supervisor.init(children, strategy: :one_for_one)
+  end
+
+  def start_link(init_arg) do
+    Supervisor.start_link(__MODULE__, init_arg, name: __MODULE__)
   end
 end
