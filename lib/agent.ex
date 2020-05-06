@@ -3,11 +3,11 @@ defmodule AgentExample do
     __MODULE__
   end
 
-  def start(state) when is_map(state) do
+  def start_link(state) when is_map(state) do
     Agent.start_link(fn -> state end, name: agent_name())
   end
 
-  def start() do
+  def start_link() do
     Agent.start_link(fn -> %{} end, name: agent_name())
   end
 

@@ -28,7 +28,6 @@ defmodule Sorts do
     :lists.merge(sorted1, sorted2)
   end
 
-  @spec compare({:arr_len, integer}, {:ps_nr, integer}) :: {{:ms, {:seq, any}, {:par, any}}}
   def compare({:arr_len, len}, {:ps_nr, ps_nr} \\ {:ps_nr, 8}) do
     list = 1..len |> Enum.to_list |> Enum.map(fn _ -> Enum.random(1..10) end)
     {seq_time, _} = :timer.tc(fn -> seq_merge_sort(list) end)
@@ -36,6 +35,15 @@ defmodule Sorts do
     {par_time, _} = :timer.tc(fn -> par_merge_sort(list, {:ps, ps_count, ps_count + ps_nr}) end)
     seq_time_ms = seq_time / 1000
     par_time_ms = par_time / 1000
-    {{:ms, {:seq, seq_time_ms}, {:par, par_time_ms}}}
+    {:ms, {:seq, seq_time_ms}, {:par, par_time_ms}}
+  end
+
+  def test({:times, n}, {:arr_len, len}, {:ps_nr, ps_nr} \\ {:ps_nr, 8}) do
+    {seq_time, par_time} = (1..n) |> Enum.to_list()
+      |> Enum.map(fn _ -> compare({:arr_len,len}, {:ps_nr, ps_nr}) end)
+      |> Enum.reduce({0, 0}, fn {:ms, {:seq, seq_time}, {:par, par_time}}, {seq_acc, par_acc} ->
+        {seq_time + seq_acc, par_time + par_acc}
+      end)
+    {seq_time / n, par_time / n}
   end
 end
